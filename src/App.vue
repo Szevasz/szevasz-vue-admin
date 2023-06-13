@@ -1,7 +1,15 @@
 <template>
-  <h1>我是app根组件</h1>
+  <div>
+    <el-button type="primary" size="default" @click="" :icon="Plus">主要按钮</el-button>
+    <el-button type="success" size="default" @click="" :icon="Edit">编辑</el-button>
+    <el-button type="danger" size="default" @click="" :icon="Delete">删除</el-button>
+    
+    
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+ import {Plus,Edit,Delete} from '@element-plus/icons-vue'
+</script>
 
 <style scoped></style>
