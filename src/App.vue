@@ -1,21 +1,13 @@
 <template>
   <div>
-    <el-button type="primary" size="default" @click="" :icon="Plus">
-      主要按钮
-    </el-button>
-    <el-button type="success" size="default" @click="" :icon="Edit">
-      编辑
-    </el-button>
-    <el-button type="danger" size="default" @click="" :icon="Delete">
-      删除
-    </el-button>
+    <h1>Svg test</h1>
+    <svg-icon name="home" color="pink" width="100px" height="100px"></svg-icon>
   </div>
-  <test />
+
 </template>
 
 <script setup lang="ts">
-import { Plus, Edit, Delete } from '@element-plus/icons-vue'
-import test from '@/components/test.vue'
+import SvgIcon from '@/components/SvgIcon/index.vue'
 </script>
 
 <style scoped></style>
