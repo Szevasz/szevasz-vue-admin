@@ -9,8 +9,8 @@
 // import SvgIcon from '@/components/SvgIcon/index.vue'
 </script>
 
-<style scoped lang="scss"> 
-h1{
+<style scoped lang="scss">
+h1 {
   color: $testColor;
 }
 </style>
