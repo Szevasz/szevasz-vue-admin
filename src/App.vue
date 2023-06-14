@@ -9,7 +9,11 @@
 // import SvgIcon from '@/components/SvgIcon/index.vue'
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"> 
+h1{
+  color: $testColor;
+}
+</style>
 <!-- 'feat',//新特性、新功能
 'fix',//修改bug
 'docs',//文档修改

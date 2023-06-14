@@ -1,3 +1,3 @@
 <template>
-    <div>分页</div>
+  <div>分页</div>
 </template>
