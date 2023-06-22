@@ -5,7 +5,7 @@ import path from 'path'
 //引入svg需要用到的插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 //
-import {viteMockServe} from 'vite-plugin-mock'
+import { viteMockServe } from 'vite-plugin-mock'
 
 export default defineConfig({
   plugins: [
@@ -17,7 +17,7 @@ export default defineConfig({
       symbolId: 'icon-[dir]-[name]',
     }),
     viteMockServe({
-      enable:true
+      enable: true,
     }),
   ],
   resolve: {

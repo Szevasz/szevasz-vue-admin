@@ -1,18 +1,15 @@
 <template>
   <div>
-    <h1>Svg test</h1>
-    <SvgIcon name="home"></SvgIcon>
+    <h1>App root</h1>
   </div>
 </template>
 
 <script setup lang="ts">
-// import SvgIcon from '@/components/SvgIcon/index.vue'
+
 </script>
 
 <style scoped lang="scss">
-h1 {
-  color: $testColor;
-}
+
 </style>
 <!-- 'feat',//新特性、新功能
 'fix',//修改bug
