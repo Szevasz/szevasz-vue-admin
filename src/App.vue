@@ -5,13 +5,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
- 
-</script>
+<script setup lang="ts"></script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
 <!-- 'feat',//新特性、新功能
 'fix',//修改bug
 'docs',//文档修改

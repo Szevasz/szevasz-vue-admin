@@ -14,6 +14,8 @@ import globalComponent from '@/components'
 import '@/styles/index.scss'
 //引入路由
 import router from './view/router'
+//引入pinia
+import pinia from './store'
 //获取应用实例对象
 const app = createApp(App)
 //安装element-plus插件
@@ -23,5 +25,6 @@ app.use(ElementPlus, {
 //安装自定义插件
 app.use(globalComponent)
 app.use(router)
+app.use(pinia)
 //将应用挂载到挂载点
 app.mount('#app')

@@ -7,7 +7,8 @@ enum API {
 }
 //暴露请求函数
 //登陆接口方法
-export const reqLogin = (data: loginForm) => request.post(API.LOGIN_URL)
+export const reqLogin = (data: loginForm) =>
+  request.post<any, loginResponseData>(API.LOGIN_URL, data)
 //获取用户信息接口方法
 export const reqUserInfo = () =>
   request.get<any, userResponseData>(API.USERINFO_URL)
