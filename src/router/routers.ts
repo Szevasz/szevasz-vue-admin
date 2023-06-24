@@ -7,7 +7,7 @@ export const constantRouter = [
   },
   {
     path: '/',
-    component: () => import('@/view/home/index.vue'),
+    component: () => import('@/layout/index.vue'),
     name: 'layout',
   },
   {

@@ -13,7 +13,7 @@ import globalComponent from '@/components'
 //引入模版的全局样式
 import '@/styles/index.scss'
 //引入路由
-import router from './view/router'
+import router from './router'
 //引入pinia
 import pinia from './store'
 //获取应用实例对象

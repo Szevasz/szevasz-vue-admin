@@ -3,17 +3,36 @@
     <el-row>
       <el-col :span="12" :xs="0">1</el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginForms">
+        <el-form
+          class="login_form"
+          :model="loginForm"
+          :rules="rules"
+          ref="loginForms"
+        >
           <h1>Hello</h1>
           <h2>欢迎来到木材干湿度检测管理系统</h2>
           <el-form-item prop="username">
-            <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
+            <el-input
+              :prefix-icon="User"
+              v-model="loginForm.username"
+            ></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input type="password" :prefix-icon="Lock" v-model="loginForm.password" show-password></el-input>
+            <el-input
+              type="password"
+              :prefix-icon="Lock"
+              v-model="loginForm.password"
+              show-password
+            ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button :loading="loading" type="primary" size="default" class="login_btn" @click="login">
+            <el-button
+              :loading="loading"
+              type="primary"
+              size="default"
+              class="login_btn"
+              @click="login"
+            >
               登陆
             </el-button>
           </el-form-item>
@@ -34,7 +53,7 @@ import { getTime } from '@/utils/time'
 import useUserStore from '@/store/modules/user'
 let useStore = useUserStore()
 //获取el-from组件
-let loginForms = ref();
+let loginForms = ref()
 //获取路由器
 let $router = useRouter()
 //定义变量控制按钮加载效果
@@ -46,7 +65,7 @@ let loginForm = reactive({ username: 'admin', password: '111111' })
 //登陆按钮回调
 const login = async () => {
   //保证全部表单项校验通过再发请求
-  await loginForms.value.validate();
+  await loginForms.value.validate()
   //加载效果：开始加载
   loading.value = true
   /**
@@ -61,7 +80,7 @@ const login = async () => {
     ElNotification({
       type: 'success',
       message: '登陆成功',
-      title: `Hi,${getTime()}好`
+      title: `Hi,${getTime()}好`,
     })
     //登陆成功加载效果消失
     loading.value = false
@@ -80,17 +99,17 @@ const validatorUserName = (rule: any, value: any, callback: any) => {
   //value:表单元素文本内容
   //callback:放行函数
   if (value.length >= 5 && value.length <= 10) {
-    callback();
+    callback()
   } else {
-    callback(new Error('账号长度为5-10位'));
+    callback(new Error('账号长度为5-10位'))
   }
 }
 
 const validatorPassWord = (rule: any, value: any, callback: any) => {
   if (value.length >= 6 && value.length <= 15) {
-    callback();
+    callback()
   } else {
-    callback(new Error('账号长度为6-15位'));
+    callback(new Error('账号长度为6-15位'))
   }
 }
 //定义表单校验需要的配置对象
@@ -101,12 +120,8 @@ const rules = {
   //max：文本长度最多多少位
   //message：错误的提示信息
   //trigger：触发校验表单的时机 change->文本发生变化触发校验,blur:失去焦点的时候触发校验
-  username: [
-    { trigger: 'change', validator: validatorUserName }
-  ],
-  password: [
-    { trigger: 'change', validator: validatorPassWord }
-  ]
+  username: [{ trigger: 'change', validator: validatorUserName }],
+  password: [{ trigger: 'change', validator: validatorPassWord }],
 }
 </script>
 
@@ -137,6 +152,7 @@ const rules = {
     margin: 20px 0px;
   }
 
-  .login_btn {}
+  .login_btn {
+  }
 }
 </style>
