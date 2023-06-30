@@ -8,7 +8,7 @@
       <el-scrollbar class="scrollbar">
         <!-- 菜单组件 -->
         <el-menu background-color="#566270" text-color="white">
-            <Menu :menuList="userStore.menuRoutes"></Menu>
+          <Menu :menuList="userStore.menuRoutes"></Menu>
         </el-menu>
       </el-scrollbar>
     </div>
@@ -16,7 +16,7 @@
     <div class="layout_tabbar">456</div>
     <!-- 内容展示区域 -->
     <div class="layout_main">
-      <p style="height: 1000px">我是一个段落</p>
+      <Main></Main>
     </div>
   </div>
 </template>
@@ -26,9 +26,11 @@
 import Logo from './logo/index.vue'
 //引入菜单组件
 import Menu from './menu/index.vue'
+//右侧内容展示区
+import Main from './main/index.vue'
 //获取用户相关的小仓库
-import useUserStore from '@/store/modules/user';
-let userStore = useUserStore();
+import useUserStore from '@/store/modules/user'
+let userStore = useUserStore()
 </script>
 
 <style scoped lang="scss">
@@ -43,7 +45,7 @@ let userStore = useUserStore();
     .scrollbar {
       width: 100%;
       height: calc(100vh - $base-menu-logo-height);
-      .el-menu{
+      .el-menu {
         border-right: none;
       }
     }
