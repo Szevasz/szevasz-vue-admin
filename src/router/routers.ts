@@ -20,7 +20,7 @@ export const constantRouter = [
       hidden: false,
       icon: 'Avatar',
     },
-    redirect:'/home',
+    redirect: '/home',
     children: [
       {
         path: '/home',
@@ -54,56 +54,56 @@ export const constantRouter = [
     },
   },
   {
-    path:'/screen',
+    path: '/screen',
     component: () => import('@/views/screen/index.vue'),
-    name:'Screen',
-    meta:{
-      hidden:false,
-      title:'数据大屏',
-      icon:'Platform',
-    }
+    name: 'Screen',
+    meta: {
+      hidden: false,
+      title: '数据大屏',
+      icon: 'Platform',
+    },
   },
   {
-    path:'/acl',
+    path: '/acl',
     component: () => import('@/layout/index.vue'),
-    name:'Acl',
-    meta:{
-      title:'权限管理',
-      hidden:false,
-      icon:'Lock'
+    name: 'Acl',
+    meta: {
+      title: '权限管理',
+      hidden: false,
+      icon: 'Lock',
     },
-    children:[
+    children: [
       {
-        path:'/acl/user',
+        path: '/acl/user',
         component: () => import('@/views/acl/user/index.vue'),
-        name:'User',
-        meta:{
-          title:'用户管理',
-          hidden:false,
-          icon:'User'
-        }
+        name: 'User',
+        meta: {
+          title: '用户管理',
+          hidden: false,
+          icon: 'User',
+        },
       },
       {
-        path:'/acl/role',
+        path: '/acl/role',
         component: () => import('@/views/acl/role/index.vue'),
-        name:'Role',
-        meta:{
-          title:'角色管理',
-          hidden:false,
-          icon:'UserFilled'
-        }
+        name: 'Role',
+        meta: {
+          title: '角色管理',
+          hidden: false,
+          icon: 'UserFilled',
+        },
       },
       {
-        path:'/acl/permission',
+        path: '/acl/permission',
         component: () => import('@/views/acl/permission/index.vue'),
-        name:'Permission',
-        meta:{
-          title:'菜单管理',
-          hidden:false,
-          icon:'Monitor'
-        }
+        name: 'Permission',
+        meta: {
+          title: '菜单管理',
+          hidden: false,
+          icon: 'Monitor',
+        },
       },
-    ]
+    ],
   },
   {
     path: '/product',

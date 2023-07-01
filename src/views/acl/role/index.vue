@@ -1,11 +1,7 @@
 <template>
-    <h1>角色管理</h1>
+  <h1>角色管理</h1>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>
