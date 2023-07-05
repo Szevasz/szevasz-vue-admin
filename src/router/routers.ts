@@ -72,7 +72,7 @@ export const constantRouter = [
       hidden: false,
       icon: 'Lock',
     },
-    redirect:'/acl/user',
+    redirect: '/acl/user',
     children: [
       {
         path: '/acl/user',

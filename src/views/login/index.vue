@@ -3,36 +3,17 @@
     <el-row>
       <el-col :span="12" :xs="0">1</el-col>
       <el-col :span="12" :xs="24">
-        <el-form
-          class="login_form"
-          :model="loginForm"
-          :rules="rules"
-          ref="loginForms"
-        >
+        <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginForms">
           <h1>Hello</h1>
           <h2>欢迎来到木材干湿度检测管理系统</h2>
           <el-form-item prop="username">
-            <el-input
-              :prefix-icon="User"
-              v-model="loginForm.username"
-            ></el-input>
+            <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input
-              type="password"
-              :prefix-icon="Lock"
-              v-model="loginForm.password"
-              show-password
-            ></el-input>
+            <el-input type="password" :prefix-icon="Lock" v-model="loginForm.password" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-              :loading="loading"
-              type="primary"
-              size="default"
-              class="login_btn"
-              @click="login"
-            >
+            <el-button :loading="loading" type="primary" size="default" class="login_btn" @click="login">
               登陆
             </el-button>
           </el-form-item>
@@ -45,7 +26,7 @@
 <script setup lang="ts">
 import { User, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import { ElNotification } from 'element-plus'
 //引入获取当前时间的函数
 import { getTime } from '@/utils/time'
@@ -56,6 +37,8 @@ let useStore = useUserStore()
 let loginForms = ref()
 //获取路由器
 let $router = useRouter()
+//获取路由对象
+let $route = useRoute()
 //定义变量控制按钮加载效果
 let loading = ref(false)
 //引入登陆接口
@@ -76,7 +59,8 @@ const login = async () => {
    */
   try {
     await useStore.userLogin(loginForm)
-    $router.push('/')
+    let redirect:any = $route.query.redirect
+    $router.push({path:redirect||'/'})
     ElNotification({
       type: 'success',
       message: '登陆成功',
@@ -152,7 +136,6 @@ const rules = {
     margin: 20px 0px;
   }
 
-  .login_btn {
-  }
+  .login_btn {}
 }
 </style>

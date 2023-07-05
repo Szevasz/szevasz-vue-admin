@@ -7,13 +7,13 @@ import useUserStore from '@/store/modules/user'
 let request = axios.create({
   //基础路径
   baseURL: import.meta.env.VITE_APP_BASE_API,
-  timeout: 5000,  //超时的时间设置
+  timeout: 5000, //超时的时间设置
 })
 //第二部:request实例添加请求与响应拦截器
 request.interceptors.request.use((config) => {
   //获取用户相关的小仓库:获取仓库内部token,登陆成功以后携带给服务器
-  let userStore = useUserStore();
-  if(userStore.token){
+  let userStore = useUserStore()
+  if (userStore.token) {
     config.headers.token = userStore.token
     console.log(config.headers.token)
   }
