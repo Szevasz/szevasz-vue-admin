@@ -16,7 +16,7 @@ export const constantRouter = [
     component: () => import('@/layout/index.vue'),
     name: 'layout',
     meta: {
-      title: 'layout', //路由标题
+      title: '', //路由标题
       hidden: false,
       icon: 'Avatar',
     },
@@ -72,6 +72,7 @@ export const constantRouter = [
       hidden: false,
       icon: 'Lock',
     },
+    redirect:'/acl/user',
     children: [
       {
         path: '/acl/user',
