@@ -36,7 +36,7 @@
 import useUserStore from '@/store/modules/user'
 //获取骨架的小仓库
 import useLayOutSettingStore from '@/store/modules/setting'
-import { useRouter,useRoute} from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 let layoutSettingStore = useLayOutSettingStore()
 let userStore = useUserStore()
 //获取路由器对象
@@ -58,12 +58,12 @@ const fullScreen = () => {
   }
 }
 //退出登陆点击回调
-const logout = () => {
+const logout = async () => {
   //第一件事情:需要向服务器发请求[退出登陆接口]
   //第二件事情:仓库当中关于用于相关的数据清空[token|username|avatar]
   //第三件事情:跳转到登陆页面
-  userStore.userLogout();
-  $router.push({path:'/login',query:{redirect:$route.path}})
+  await userStore.userLogout()
+  $router.push({ path: '/login', query: { redirect: $route.path } })
 }
 </script>
 
