@@ -3,36 +3,17 @@
     <el-row>
       <el-col :span="12" :xs="0">1</el-col>
       <el-col :span="12" :xs="24">
-        <el-form
-          class="login_form"
-          :model="loginForm"
-          :rules="rules"
-          ref="loginForms"
-        >
+        <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginForms">
           <h1>Hello</h1>
           <h2>欢迎来到木材干湿度检测管理系统</h2>
           <el-form-item prop="username">
-            <el-input
-              :prefix-icon="User"
-              v-model="loginForm.username"
-            ></el-input>
+            <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input
-              type="password"
-              :prefix-icon="Lock"
-              v-model="loginForm.password"
-              show-password
-            ></el-input>
+            <el-input type="password" :prefix-icon="Lock" v-model="loginForm.password" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-              :loading="loading"
-              type="primary"
-              size="default"
-              class="login_btn"
-              @click="login"
-            >
+            <el-button :loading="loading" type="primary" size="default" class="login_btn" @click="login">
               登陆
             </el-button>
           </el-form-item>
@@ -60,8 +41,6 @@ let $router = useRouter()
 let $route = useRoute()
 //定义变量控制按钮加载效果
 let loading = ref(false)
-//引入登陆接口
-import { reqLogin } from '@/api/user'
 //收集账号与密码的数据
 let loginForm = reactive({ username: 'admin', password: 'atguigu123' })
 //登陆按钮回调
@@ -153,9 +132,6 @@ const rules = {
     color: white;
     font-size: 20px;
     margin: 20px 0px;
-  }
-
-  .login_btn {
   }
 }
 </style>
