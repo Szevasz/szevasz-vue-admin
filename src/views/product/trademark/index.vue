@@ -33,6 +33,8 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      @size-change="sizeChange"
+      @current-change="getHasTrademark"
       v-model:current-page="PageNo"
       v-model:page-size="limit"
       :page-sizes="[3, 5, 7, 9]"
@@ -47,6 +49,7 @@
 import { onMounted, ref } from 'vue'
 import { reqHasTrademark } from '@/api/product/trademark'
 import { Records, TradeMarkResponseData } from '@/api/product/trademark/type'
+import { getChildState } from 'element-plus/es/components/tree/src/model/node.js'
 //当前页码
 let PageNo = ref<number>(1)
 //每一页展示多少条数据
@@ -55,8 +58,12 @@ let limit = ref<number>(3)
 let total = ref<number>(0)
 //存储已有品牌的数据
 let trademarkArr = ref<Records>([])
-const getHasTrademark = async () => {
-  let result:TradeMarkResponseData = await reqHasTrademark(PageNo.value, limit.value)
+const getHasTrademark = async (pager = 1) => {
+  PageNo.value = pager
+  let result: TradeMarkResponseData = await reqHasTrademark(
+    PageNo.value,
+    limit.value,
+  )
   total.value = result.data.total
   trademarkArr.value = result.data.records
   console.log(result)
@@ -65,6 +72,10 @@ const getHasTrademark = async () => {
 onMounted(() => {
   getHasTrademark()
 })
+
+const sizeChange = () => {
+  getHasTrademark()
+}
 </script>
 
 <style lang="scss"></style>
