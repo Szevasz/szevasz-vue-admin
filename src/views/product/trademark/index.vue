@@ -1,7 +1,9 @@
 <template>
   <el-card class="box-card">
     <!-- 顶部添加品牌按钮 -->
-    <el-button type="primary" size="default" icon="Plus" @click="addTrademark">添加品牌</el-button>
+    <el-button type="primary" size="default" icon="Plus" @click="addTrademark">
+      添加品牌
+    </el-button>
     <!-- 表格组件:用于展示数据 -->
     <el-table style="margin: 10px 0px" border :data="trademarkArr">
       <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
@@ -29,21 +31,21 @@
   </el-card>
   <!-- 对话框组件,在添加品牌和修改已有品牌时使用 -->
   <el-dialog v-model="dialogFormVisible" title="Shipping address">
-    <el-form style="width:80%">
+    <el-form style="width: 80%">
       <el-form-item label="品牌名称" label-width="80px">
-        <el-input placeholder="请您输入品牌名称"></el-input>
+        <el-input placeholder="请您输入品牌名称" v-model="trademarkParams.tmName"></el-input>
       </el-form-item>
       <el-form-item label="品牌LOGO" label-width="80px">
-        <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-          :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <el-upload class="avatar-uploader" action="/api/admin/product/fileUpload" :show-file-list="false"
+          :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+          <img v-if="trademarkParams.logoUrl" :src="trademarkParams.logoUrl" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
         </el-upload>
       </el-form-item>
     </el-form>
-      <!-- 具名插槽footer -->
+    <!-- 具名插槽footer -->
     <template #footer>
       <el-button type="primary" size="default" @click="cancel">取消</el-button>
       <el-button type="primary" size="default" @click="confirm">确定</el-button>
@@ -52,10 +54,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { reqHasTrademark } from '@/api/product/trademark'
-import { Records, TradeMarkResponseData } from '@/api/product/trademark/type'
-import { getChildState } from 'element-plus/es/components/tree/src/model/node.js'
+import { UploadProps, ElMessage } from 'element-plus'
+import { onMounted, reactive, ref } from 'vue'
+import { reqHasTrademark,reqAddOrUpdateTrademark, reqDeleteTrademark  } from '@/api/product/trademark'
+import { Records, TradeMark, TradeMarkResponseData } from '@/api/product/trademark/type'
 //当前页码
 let PageNo = ref<number>(1)
 //每一页展示多少条数据
@@ -66,15 +68,20 @@ let total = ref<number>(0)
 let trademarkArr = ref<Records>([])
 //控制对话框显示
 let dialogFormVisible = ref<boolean>(false)
+//定义新增品牌数据
+let trademarkParams = reactive<TradeMark>({
+  tmName: '',
+  logoUrl: ''
+})
 const getHasTrademark = async (pager = 1) => {
-  PageNo.value = pager
-  let result: TradeMarkResponseData = await reqHasTrademark(
-    PageNo.value,
-    limit.value,
-  )
-  total.value = result.data.total
-  trademarkArr.value = result.data.records
-  console.log(result)
+  //当前页码
+  PageNo.value = pager;
+  let result: TradeMarkResponseData = await reqHasTrademark(PageNo.value, limit.value);
+  if (result.code == 200) {
+    //存储已有品牌总个数
+    total.value = result.data.total;
+    trademarkArr.value = result.data.records;
+  }
 }
 
 onMounted(() => {
@@ -99,6 +106,41 @@ const cancel = () => {
 
 const confirm = () => {
   dialogFormVisible.value = false
+}
+
+//上传图片组件->上传图片之前触发的钩子函数
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  //钩子是在图片上传成功之前触发,上传文件之前可以约束文件类型与大小
+  //要求:上传文件格式png|jpg|gif 4M
+  if (rawFile.type == 'image/png' || rawFile.type == 'image/jpeg' || rawFile.type == 'image/gif') {
+    if (rawFile.size / 1024 / 1024 < 4) {
+      return true;
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '上传文件大小大于4M'
+      })
+      return false;
+    }
+  } else {
+    ElMessage({
+      type: 'error',
+      message: "上传文件格式务必PNG|JPG|GIF"
+    })
+    return false;
+  }
+}
+
+//图片上传成功钩子
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+  console.log(response)
+    //response:即为当前这次上传图片post请求服务器返回的数据
+    //收集上传图片的地址,添加一个新的品牌的时候带给服务器
+  trademarkParams.logoUrl = response.data;
+  console.log(trademarkParams.logoUrl)
+    //图片上传成功,清除掉对应图片校验结果
+
+
 }
 </script>
 

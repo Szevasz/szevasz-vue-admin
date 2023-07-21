@@ -37,7 +37,7 @@ let useUserStore = defineStore('User', {
         //由于pinia/vuex存储数据其实利用js对象
         this.token = result.data as string
         //本地存储持久化存储一份
-        localStorage.setItem('TOKEN', result.data as string)
+        // localStorage.setItem('TOKEN', result.data as string)
         SET_TOKEN(result.data as string)
         return 'ok'
       } else {

@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus'
 //引入用户相关的仓库
 import useUserStore from '@/store/modules/user'
 //第一步:利用axios对象的create方法，去创建axios实例(其他的配置：基础路径、超时的时间)
-let request = axios.create({
+const request = axios.create({
   //基础路径
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 5000, //超时的时间设置
@@ -12,7 +12,7 @@ let request = axios.create({
 //第二部:request实例添加请求与响应拦截器
 request.interceptors.request.use((config) => {
   //获取用户相关的小仓库:获取仓库内部token,登陆成功以后携带给服务器
-  let userStore = useUserStore()
+  const userStore = useUserStore()
   if (userStore.token) {
     config.headers.token = userStore.token
   }
