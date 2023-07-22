@@ -3,17 +3,36 @@
     <el-row>
       <el-col :span="12" :xs="0">1</el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginForms">
+        <el-form
+          class="login_form"
+          :model="loginForm"
+          :rules="rules"
+          ref="loginForms"
+        >
           <h1>Hello</h1>
           <h2>欢迎来到木材干湿度检测管理系统</h2>
           <el-form-item prop="username">
-            <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
+            <el-input
+              :prefix-icon="User"
+              v-model="loginForm.username"
+            ></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input type="password" :prefix-icon="Lock" v-model="loginForm.password" show-password></el-input>
+            <el-input
+              type="password"
+              :prefix-icon="Lock"
+              v-model="loginForm.password"
+              show-password
+            ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button :loading="loading" type="primary" size="default" class="login_btn" @click="login">
+            <el-button
+              :loading="loading"
+              type="primary"
+              size="default"
+              class="login_btn"
+              @click="login"
+            >
               登陆
             </el-button>
           </el-form-item>
@@ -76,7 +95,7 @@ const login = async () => {
   }
 }
 //自定义校验规则函数
-const validatorUserName = (rule: any,value: any, callback: any) => {
+const validatorUserName = (rule: any, value: any, callback: any) => {
   //rule:校验规则对象
   //value:表单元素文本内容
   //callback:放行函数

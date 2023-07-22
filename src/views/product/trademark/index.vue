@@ -93,6 +93,9 @@ const sizeChange = () => {
 }
 //添加品牌按钮回调
 const addTrademark = () => {
+  //清空收集的数据
+  trademarkParams.tmName = '';
+  trademarkParams.logoUrl = '';
   dialogFormVisible.value = true
 }
 //修改品牌按钮回调
@@ -104,8 +107,25 @@ const cancel = () => {
   dialogFormVisible.value = false
 }
 
-const confirm = () => {
-  dialogFormVisible.value = false
+const confirm = async () => {
+  let result:any = await reqAddOrUpdateTrademark(trademarkParams)
+  //添加品牌成功
+  if(result.code == 200){
+    dialogFormVisible.value = false
+    ElMessage({
+      type:'success',
+      message:'添加品牌成功'
+    });
+    //再次发送请求获取品牌信息
+    getHasTrademark()
+  }else{
+    //添加品牌失败
+    ElMessage({
+      type:'error',
+      message:'添加品牌失败'
+    })
+    dialogFormVisible.value = false
+  }
 }
 
 //上传图片组件->上传图片之前触发的钩子函数
@@ -137,7 +157,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => 
     //response:即为当前这次上传图片post请求服务器返回的数据
     //收集上传图片的地址,添加一个新的品牌的时候带给服务器
   trademarkParams.logoUrl = response.data;
-  console.log(trademarkParams.logoUrl)
+  // console.log(trademarkParams.logoUrl)
     //图片上传成功,清除掉对应图片校验结果
 
 
