@@ -21,7 +21,11 @@
       <el-table-column label="操作">
         <template #="{ row, $index }">
           <el-button type="primary" size="small" icon="Edit" @click="updateTrademark(row)"></el-button>
-          <el-button type="danger" size="small" icon="Delete"></el-button>
+          <el-popconfirm :title="`您确定要删除${row.tmName}?`" width="250px" icon="Delete" @confirm="removeTradeMark(row.id)">
+            <template #reference>
+              <el-button type="danger" size="small" icon="Delete"></el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -112,7 +116,7 @@ const addTrademark = () => {
   trademarkParams.tmName = ''
   trademarkParams.logoUrl = ''
   dialogFormVisible.value = true
-  
+
   //清空校验规则的提示信息
   formRef.value?.clearValidate('tmName')
   formRef.value?.clearValidate('logoUrl')
@@ -122,7 +126,7 @@ const updateTrademark = (row: TradeMark) => {
   //清空校验规则的提示信息
   formRef.value?.clearValidate('tmName')
   formRef.value?.clearValidate('logoUrl')
-  
+
   dialogFormVisible.value = true
   trademarkParams.id = row.id
   trademarkParams.tmName = row.tmName
@@ -145,7 +149,7 @@ const confirm = async () => {
       message: trademarkParams.id ? '修改品牌成功' : '添加品牌成功',
     })
     //再次发送请求获取品牌信息
-    getHasTrademark(trademarkParams.id?PageNo.value:1)
+    getHasTrademark(trademarkParams.id ? PageNo.value : 1)
   } else {
     //添加品牌失败
     ElMessage({
@@ -197,29 +201,42 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
 }
 
 //品牌名称自定义校验规则
-const validatorTmName = (rule:any,value:any,callBack:any) => {
-  if(value.trim().length >= 2){
+const validatorTmName = (rule: any, value: any, callBack: any) => {
+  if (value.trim().length >= 2) {
     callBack()
-  }else{
-    callBack(new Error("品牌名称位数小于两位"))
+  } else {
+    callBack(new Error('品牌名称位数小于两位'))
   }
 }
 //品牌LOGO自定义校验
-const validatorLogoUrl = (rule:any,value:any,callBack:any) => {
-  if(value){
+const validatorLogoUrl = (rule: any, value: any, callBack: any) => {
+  if (value) {
     callBack()
-  }else{
+  } else {
     callBack(new Error('请上传品牌LOGO'))
   }
 }
 //表单校验规则对象
 const rules = {
-  tmName:[
-    { required:true, trigger: 'blur', validator:validatorTmName} 
-  ],
-  logoUrl:[
-    { required:true, validator:validatorLogoUrl}
-  ]
+  tmName: [{ required: true, trigger: 'blur', validator: validatorTmName }],
+  logoUrl: [{ required: true, validator: validatorLogoUrl }],
+}
+//气泡确认框点击确定按钮的回调
+const removeTradeMark = async (id:number) => {
+  let result = await reqDeleteTrademark(id)
+  if(result.code == 200){
+    ElMessage({
+      type:'success',
+      message:'删除品牌成功',
+    });
+    //再次获取已有品牌数据
+    getHasTrademark(trademarkArr.value.length > 1 ? PageNo.value : PageNo.value - 1)
+  }else{
+    ElMessage({
+      type:'error',
+      message:'删除品牌失败',
+    });
+  }
 }
 </script>
 
