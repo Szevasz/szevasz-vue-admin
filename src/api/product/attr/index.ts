@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { CategoryResponseData } from './type'
+import type { AttrResponseData, CategoryResponseData } from './type'
 enum API {
   //一级分类接口地址
   C1_URL = '/admin/product/getCategory1',
@@ -8,7 +8,7 @@ enum API {
   //三级分类接口地址
   C3_URL = '/admin/product/getCategory3/',
   //商品基础属性接口地址
-  ATTR_URL = '/admin/product/attrInfoList/'
+  ATTR_URL = '/admin/product/attrInfoList/',
 }
 
 //获取一级分类的接口方法
@@ -20,4 +20,11 @@ export const reqC2 = (category1Id: number | string) =>
 export const reqC3 = (category2Id: number | string) =>
   request.get<any, CategoryResponseData>(API.C3_URL + category2Id)
 //获取对应分类下的已有属性与属性值接口
-export const reqAttr = (category1Id: string | number, category2Id: string | number, category3Id: string | number) => request.get<any,any>(API.ATTR_URL + `${category1Id}/${category2Id}/${category3Id}`)
+export const reqAttr = (
+  category1Id: string | number,
+  category2Id: string | number,
+  category3Id: string | number,
+) =>
+  request.get<any, AttrResponseData>(
+    API.ATTR_URL + `${category1Id}/${category2Id}/${category3Id}`,
+  )
