@@ -2,7 +2,7 @@
   <div>
     <Category />
     <el-card style="margin: 10px 0px">
-      <el-button type="primary" size="default" @click="" icon="Plus">
+      <el-button type="primary" size="default" @click="" icon="Plus" :disabled="categoryStore.c3Id?false:true">
         添加属性
       </el-button>
       <el-table border style="margin: 10px 0px">
@@ -20,6 +20,10 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+//获取分类的仓库
+import useCategoryStore from '@/store/modules/category';
+let categoryStore = useCategoryStore()
+</script>
 
 <style lang="scss"></style>
