@@ -9,6 +9,8 @@ enum API {
   C3_URL = '/admin/product/getCategory3/',
   //商品基础属性接口地址
   ATTR_URL = '/admin/product/attrInfoList/',
+  //添加或修改已有的属性的接口地址
+  ADDORUPDATEATTR_URL = '/admin/product/saveAttrInfo/'
 }
 
 //获取一级分类的接口方法
@@ -28,3 +30,5 @@ export const reqAttr = (
   request.get<any, AttrResponseData>(
     API.ATTR_URL + `${category1Id}/${category2Id}/${category3Id}`,
   )
+//添加或新增已有属性接口方法
+export const reqAddOrUpdateAttr = (data:Attr) => request.post<any,any>(API.ADDORUPDATEATTR_URL,data)
