@@ -43,12 +43,13 @@
           <el-table-column label="序号" width="80px" type="index" align="center"></el-table-column>
           <el-table-column label="属性值名称">
             <template #="{ row, $index }">
-              <el-input placeholder="请您输入属性值名称" v-model="row.valueName"></el-input>
+              <el-input placeholder="请您输入属性值名称" v-model="row.valueName" v-if="row.flag" @blur="toLook(row,$index)" size="small"></el-input>
+              <div v-else @click="toEdit(row)">{{ row.valueName }}</div>
             </template>
           </el-table-column>
           <el-table-column label="属性值操作"></el-table-column>
         </el-table>
-        <el-button type="primary" size="default" @click="save">保存</el-button>
+        <el-button type="primary" size="default" @click="save" :disabled="attrParams.attrValueList.length > 0?false:true">保存</el-button>
         <el-button type="primary" size="default" @click="cancel">
           取消
         </el-button>
@@ -66,10 +67,13 @@ let categoryStore = useCategoryStore()
 //引入类型
 import type { Attr } from '@/api/product/attr/type'
 import { ElMessage } from 'element-plus'
+import { AttrValue } from '@/api/product/attr/type'
 //存储已有属性和属性值
 let attrArr = ref<Attr[]>([])
 //定义card组件内容切换变量
 let scene = ref<number>(0)
+//控制编辑模式或查看模式的数据
+let flag = ref<boolean>(true)
 //收集新增的属性的数据
 let attrParams = reactive<Attr>({
   attrName: '', //新增的属性的名字
@@ -121,7 +125,8 @@ const cancel = () => {
 //添加属性值按钮的回调
 const addAttrValue = () => {
   attrParams.attrValueList.push({
-    valueName: ''
+    valueName: '',
+    flag:true  //控制每一个属性值的编辑模式和查看模式
   })
 }
 //保存按钮的回调
@@ -134,15 +139,50 @@ const save = async () => {
     //提示信息
     ElMessage({
       type: 'success',
-      message: attrParams.id ? '修改成功' : '添加成功'
+      message: attrParams.id ? '修改成功' : '添加成功',
     })
     getAttr()
   } else {
     ElMessage({
       type: 'error',
-      message: attrParams.id ? '修改失败' : '添加失败'
+      message: attrParams.id ? '修改失败' : '添加失败',
     })
   }
+}
+//属性值表单失去焦点方法
+const toLook = (row:AttrValue,$index:number) => {
+  //非法情况1:属性值为空
+  if(row.valueName.trim() == ''){
+    //删除对应属性值为空的元素
+    attrParams.attrValueList.splice($index,1)
+    //提示信息
+    ElMessage({
+      type:'error',
+      message:"属性值不能为空！"
+    })
+    return
+  }
+  //非法情况2:属性值重复
+  let repeat = attrParams.attrValueList.find((item) => {
+    //把当前失去焦点属性值对象从当前数组扣除
+    if(item != row){
+      return item.valueName === row.valueName
+    }
+  })
+  if(repeat){
+    //将重复的值去除
+    attrParams.attrValueList.splice($index,1)
+    ElMessage({
+      type:'error',
+      message:'属性值不能重复'
+    })
+    return
+  }
+  row.flag = false
+}
+//div获得焦点进入编辑模式方法
+const toEdit = (row:AttrValue) => {
+  row.flag = true
 }
 </script>
 
