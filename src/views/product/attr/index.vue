@@ -19,7 +19,8 @@
           </el-table-column>
           <el-table-column label="操作">
             <template #="{ row, $index }">
-              <el-button type="primary" size="default" @click="updateAttr" icon="Edit"></el-button>
+              <!-- 修改已有属性的按钮 -->
+              <el-button type="primary" size="default" @click="updateAttr(row)" icon="Edit"></el-button>
               <el-button type="primary" size="default" @click="" icon="Delete"></el-button>
             </template>
           </el-table-column>
@@ -44,13 +45,14 @@
           <el-table-column label="属性值名称">
             <template #="{ row, $index }">
               <el-input placeholder="请您输入属性值名称" v-model="row.valueName" v-if="row.flag" @blur="toLook(row, $index)"
-                size="small" :ref="(vc:any)=>inputArr[$index]=vc"></el-input>
-              <div v-else @click="toEdit(row,$index)">{{ row.valueName }}</div>
+                size="small" :ref="(vc: any) => inputArr[$index] = vc"></el-input>
+              <div v-else @click="toEdit(row, $index)">{{ row.valueName }}</div>
             </template>
           </el-table-column>
           <el-table-column label="属性值操作">
-            <template #="{row,$index}">
-              <el-button type="primary" size="small" @click="attrParams.attrValueList.splice($index,1)" icon="Delete"></el-button>
+            <template #="{ row, $index }">
+              <el-button type="primary" size="small" @click="attrParams.attrValueList.splice($index, 1)"
+                icon="Delete"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -125,8 +127,11 @@ const addAttr = () => {
   attrParams.categoryId = categoryStore.c3Id
 }
 //修改属性按钮回调函数
-const updateAttr = () => {
+const updateAttr = (row: Attr) => {
+  //切换为添加与修改属性的组件
   scene.value = 1
+  //将已有的属性赋值给attrParams对象
+  Object.assign(attrParams,JSON.parse(JSON.stringify(row)))
 }
 //取消按钮的回调
 const cancel = () => {
@@ -139,8 +144,8 @@ const addAttrValue = () => {
     flag: true, //控制每一个属性值的编辑模式和查看模式
   })
   //获取最后el-input组件聚焦
-  nextTick(()=>{
-    inputArr.value[attrParams.attrValueList.length-1].focus()
+  nextTick(() => {
+    inputArr.value[attrParams.attrValueList.length - 1].focus()
   })
 }
 //保存按钮的回调
@@ -195,10 +200,10 @@ const toLook = (row: AttrValue, $index: number) => {
   row.flag = false
 }
 //div获得焦点进入编辑模式方法
-const toEdit = (row: AttrValue,$index:number) => {
+const toEdit = (row: AttrValue, $index: number) => {
   row.flag = true
   //nextTick:响应式数据发生变化,获取更新的DOM(组件实例)
-  nextTick(()=>{
+  nextTick(() => {
     inputArr.value[$index].focus()
   })
 }
