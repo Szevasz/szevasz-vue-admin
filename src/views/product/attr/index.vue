@@ -21,7 +21,11 @@
             <template #="{ row, $index }">
               <!-- 修改已有属性的按钮 -->
               <el-button type="primary" size="default" @click="updateAttr(row)" icon="Edit"></el-button>
-              <el-button type="primary" size="default" @click="" icon="Delete"></el-button>
+              <el-popconfirm :title="`你确定删除${row.attrName}?`" width="200px" @confirm="deleteAttr(row.id)">
+                <template #reference>
+                  <el-button type="primary" size="default" icon="Delete"></el-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -70,9 +74,9 @@
 
 <script setup lang="ts">
 //获取分类的仓库
-import { reqAttr, reqAddOrUpdateAttr } from '@/api/product/attr'
+import { reqAttr, reqAddOrUpdateAttr, reqRemoveAttr } from '@/api/product/attr'
 import useCategoryStore from '@/store/modules/category'
-import { nextTick, reactive, ref, watch } from 'vue'
+import { nextTick, reactive, ref, watch, onBeforeUnmount } from 'vue'
 let categoryStore = useCategoryStore()
 //引入类型
 import type { Attr } from '@/api/product/attr/type'
@@ -131,7 +135,7 @@ const updateAttr = (row: Attr) => {
   //切换为添加与修改属性的组件
   scene.value = 1
   //将已有的属性赋值给attrParams对象
-  Object.assign(attrParams,JSON.parse(JSON.stringify(row)))
+  Object.assign(attrParams, JSON.parse(JSON.stringify(row)))
 }
 //取消按钮的回调
 const cancel = () => {
@@ -207,6 +211,27 @@ const toEdit = (row: AttrValue, $index: number) => {
     inputArr.value[$index].focus()
   })
 }
+//删除属性按钮回调方法
+const deleteAttr = async (attrId: number) => {
+  let result: any = await reqRemoveAttr(attrId)
+  if (result.code == 200) {
+    ElMessage({
+      type: 'success',
+      message: "删除成功!"
+    })
+    getAttr()
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '删除失败!'
+    })
+  }
+}
+//路由组件销毁的时候,把仓库分类相关的数据清空
+onBeforeUnmount(()=>{
+  //清空仓库的数据
+  categoryStore.$reset()
+})
 </script>
 
 <style lang="scss"></style>
