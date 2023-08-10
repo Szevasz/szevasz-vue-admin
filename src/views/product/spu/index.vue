@@ -8,24 +8,68 @@
           添加SPU
         </el-button>
         <el-table style="margin: 10px 0px" border :data="records">
-          <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
+          <el-table-column
+            label="序号"
+            type="index"
+            align="center"
+            width="80px"
+          ></el-table-column>
           <el-table-column label="SPU名称" prop="spuName"></el-table-column>
-          <el-table-column label="SPU描述" prop="description" show-overflow-tooltip></el-table-column>
+          <el-table-column
+            label="SPU描述"
+            prop="description"
+            show-overflow-tooltip
+          ></el-table-column>
           <el-table-column label="SPU操作">
             <template #="{ row, $index }">
-              <el-button type="primary" size="default" @click="" icon="Plus" title="添加SKU"></el-button>
-              <el-button type="primary" size="default" @click="updateSpu(row)" icon="Edit" title="修改SPU"></el-button>
-              <el-button type="primary" size="default" @click="" icon="View" title="查看SKU列表"></el-button>
-              <el-button type="primary" size="default" @click="" icon="Delete" title="删除SPU"></el-button>
+              <el-button
+                type="primary"
+                size="default"
+                @click=""
+                icon="Plus"
+                title="添加SKU"
+              ></el-button>
+              <el-button
+                type="primary"
+                size="default"
+                @click="updateSpu(row)"
+                icon="Edit"
+                title="修改SPU"
+              ></el-button>
+              <el-button
+                type="primary"
+                size="default"
+                @click=""
+                icon="View"
+                title="查看SKU列表"
+              ></el-button>
+              <el-button
+                type="primary"
+                size="default"
+                @click=""
+                icon="Delete"
+                title="删除SPU"
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[3, 5, 7, 9]"
-          :background="true" layout=" prev, pager, next, jumper,->,total, sizes" :total="total" @size-change="changeSize"
-          @current-change="getHasSpu" />
+        <el-pagination
+          v-model:current-page="pageNo"
+          v-model:page-size="pageSize"
+          :page-sizes="[3, 5, 7, 9]"
+          :background="true"
+          layout=" prev, pager, next, jumper,->,total, sizes"
+          :total="total"
+          @size-change="changeSize"
+          @current-change="getHasSpu"
+        />
       </div>
       <!-- 添加spu｜修改spu组件 -->
-      <SpuForm ref="spu" v-show="scene == 1" @changeScene="changeScene"></SpuForm>
+      <SpuForm
+        ref="spu"
+        v-show="scene == 1"
+        @changeScene="changeScene"
+      ></SpuForm>
       <!-- 添加sku组件 -->
       <SkuForm v-show="scene == 2"></SkuForm>
     </el-card>

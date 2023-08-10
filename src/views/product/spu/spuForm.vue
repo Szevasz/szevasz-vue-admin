@@ -14,8 +14,13 @@
       <el-input type="textarea" placeholder="请您输入SPU描述"></el-input>
     </el-form-item>
     <el-form-item label="SPU图标">
-      <el-upload v-model:file-list="fileList" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+      <el-upload
+        v-model:file-list="fileList"
+        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        list-type="picture-card"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove"
+      >
         <el-icon>
           <Plus />
         </el-icon>
@@ -31,9 +36,20 @@
         <el-option label="苹果"></el-option>
         <el-option label="小米"></el-option>
       </el-select>
-      <el-button style="margin-left: 10px" type="primary" size="default" @click="" icon="Plus"></el-button>
+      <el-button
+        style="margin-left: 10px"
+        type="primary"
+        size="default"
+        @click=""
+        icon="Plus"
+      ></el-button>
       <el-table border style="margin: 10px 0px">
-        <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
+        <el-table-column
+          label="序号"
+          type="index"
+          align="center"
+          width="80px"
+        ></el-table-column>
         <el-table-column label="销售属性名称" width="120px"></el-table-column>
         <el-table-column label="销售属性值"></el-table-column>
         <el-table-column label="操作" width="120px"></el-table-column>
@@ -47,9 +63,24 @@
 </template>
 
 <script setup lang="ts">
-import type { HasSaleAttr, HasSaleAttrResponseData, SaleAttr, SpuData, SpuImg } from '@/api/product/spu/type'
-import { reqAllTradeMark,reqSpuImageList,reqSpuHasSaleAttr,reqAllSaleAttr } from '@/api/product/spu'
-import type { AllTradeMark,SpuHasImg,SaleAttrResponseData } from '@/api/product/spu/type'
+import type {
+  HasSaleAttr,
+  HasSaleAttrResponseData,
+  SaleAttr,
+  SpuData,
+  SpuImg,
+} from '@/api/product/spu/type'
+import {
+  reqAllTradeMark,
+  reqSpuImageList,
+  reqSpuHasSaleAttr,
+  reqAllSaleAttr,
+} from '@/api/product/spu'
+import type {
+  AllTradeMark,
+  SpuHasImg,
+  SaleAttrResponseData,
+} from '@/api/product/spu/type'
 import { TradeMark } from '@/api/product/trademark/type'
 import { ref } from 'vue'
 let $emit = defineEmits(['changeScene'])
@@ -70,9 +101,9 @@ const initHasSpuData = async (spu: SpuData) => {
   //获取全部品牌的数据
   let result: AllTradeMark = await reqAllTradeMark()
   //获取摸一个品牌下全部售卖商品的图片
-  let result1: SpuHasImg = await reqSpuImageList((spu.id as number))
+  let result1: SpuHasImg = await reqSpuImageList(spu.id as number)
   //获取已有的SPU销售属性的数据
-  let result2: SaleAttrResponseData = await reqSpuHasSaleAttr((spu.id as number))
+  let result2: SaleAttrResponseData = await reqSpuHasSaleAttr(spu.id as number)
   //获取整个项目全部的SPU的销售属性
   let result3: HasSaleAttrResponseData = await reqAllSaleAttr()
 
