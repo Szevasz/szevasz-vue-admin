@@ -1,15 +1,27 @@
 <template>
   <el-form label-width="100px">
     <el-form-item label="SPU名称">
-      <el-input placeholder="请您输入SPU名称" v-model="SpuParams.spuName"></el-input>
+      <el-input
+        placeholder="请您输入SPU名称"
+        v-model="SpuParams.spuName"
+      ></el-input>
     </el-form-item>
     <el-form-item label="SPU品牌">
       <el-select v-model="SpuParams.tmId">
-        <el-option v-for="(item,index) in AllTradeMark" :key="item.id" :label="item.tmName" :value="item.id"></el-option>
+        <el-option
+          v-for="(item, index) in AllTradeMark"
+          :key="item.id"
+          :label="item.tmName"
+          :value="item.id"
+        ></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="SPU描述">
-      <el-input type="textarea" placeholder="请您输入SPU描述" v-model="SpuParams.description"></el-input>
+      <el-input
+        type="textarea"
+        placeholder="请您输入SPU描述"
+        v-model="SpuParams.description"
+      ></el-input>
     </el-form-item>
     <el-form-item label="SPU图标">
       <el-upload
@@ -96,12 +108,12 @@ let saleAttr = ref<SaleAttr[]>([])
 let allSaleAttr = ref<HasSaleAttr[]>([])
 //存储已有的SPU
 let SpuParams = ref<SpuData>({
-  category3Id: "",
-  spuName: "",
-  description: "",
+  category3Id: '',
+  spuName: '',
+  description: '',
   tmId: '',
-  spuImageList:[],
-  spuSaleAttrList:[],
+  spuImageList: [],
+  spuSaleAttrList: [],
 })
 const initHasSpuData = async (spu: SpuData) => {
   //存储已有的SPU对象
