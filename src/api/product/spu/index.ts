@@ -22,7 +22,7 @@ enum API {
   //追加一个新的SPU
   ADDSPU_URL = '/admin/product/saveSpuInfo/',
   //更新SPU
-  UPDATESPU_URL = '/admin/product/saveSpuInfo/'
+  UPDATESPU_URL = '/admin/product/saveSpuInfo/',
 }
 
 //获取某一三级分类下的数据
@@ -49,11 +49,11 @@ export const reqAllSaleAttr = () =>
 //新增SPU
 //更新SPU
 //data:即为新增的SPU｜或者已有的SPU对象
-export const reqAddOrUpdateSpu = (data:SpuData) => {
-    //如果SPU对象拥有ID,更新已有的SPU
-    if(data.id){
-        return request.post<any,any>(API.UPDATESPU_URL,data)
-    }else{
-        return request.post<any,any>(API.ADDSPU_URL,data)
-    }
+export const reqAddOrUpdateSpu = (data: SpuData) => {
+  //如果SPU对象拥有ID,更新已有的SPU
+  if (data.id) {
+    return request.post<any, any>(API.UPDATESPU_URL, data)
+  } else {
+    return request.post<any, any>(API.ADDSPU_URL, data)
+  }
 }
