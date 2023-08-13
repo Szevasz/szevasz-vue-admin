@@ -20,7 +20,7 @@
       </el-upload>
 
       <el-dialog v-model="dialogVisible">
-        <img w-full :src="dialogImageUrl" alt="Preview Image" style="height: 100%;width: 100%;"/>
+        <img w-full :src="dialogImageUrl" alt="Preview Image" style="height: 100%; width: 100%" />
       </el-dialog>
     </el-form-item>
     <el-form-item label="SPU销售属性">
@@ -29,12 +29,23 @@
         <el-option label="苹果"></el-option>
         <el-option label="小米"></el-option>
       </el-select>
-      <el-button style="margin-left: 10px" type="primary" size="default" @click="" icon="Plus"></el-button>
-      <el-table border style="margin: 10px 0px">
+      <el-button style="margin-left: 10px" type="primary" size="default" @click="" icon="Plus">添加属性值</el-button>
+      <el-table border style="margin: 10px 0px" :data="saleAttr">
         <el-table-column label="序号" type="index" align="center" width="80px"></el-table-column>
-        <el-table-column label="销售属性名称" width="120px"></el-table-column>
-        <el-table-column label="销售属性值"></el-table-column>
-        <el-table-column label="操作" width="120px"></el-table-column>
+        <el-table-column label="销售属性名称" width="120px" prop="saleAttrName"></el-table-column>
+        <el-table-column label="销售属性值">
+          <template #="{ row, $index }">
+            <el-tag v-for="(item,index) in row.spuSaleAttrValueList" :key="item.id" class="mx-1" closable style="margin: 0px 5px;">
+              {{ item.saleAttrValueName }}
+            </el-tag>
+            <el-button type="primary" size="small" @click="" icon="Plus"></el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="120px">
+          <template #="{row,$index}">
+            <el-button type="primary" size="small" @click="saleAttr.splice($index,1)" icon="Delete"></el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-form-item>
     <el-form-item>
@@ -109,10 +120,10 @@ const initHasSpuData = async (spu: SpuData) => {
   //存储全部品牌的数据
   AllTradeMark.value = result.data
   //存储SPU的商品图片(map将对应数据名称转换适应Element组件的需要)
-  imgList.value = result1.data.map(item => {
+  imgList.value = result1.data.map((item) => {
     return {
       name: item.imgName,
-      url: item.imgUrl
+      url: item.imgUrl,
     }
   })
   //存储已有的SPU的销售属性
@@ -121,7 +132,7 @@ const initHasSpuData = async (spu: SpuData) => {
   allSaleAttr.value = result3.data
 }
 //照片墙点击预览按钮的时候触发钩子
-const handlePictureCardPreview = (file:any) => {
+const handlePictureCardPreview = (file: any) => {
   //对话框显示图片地址赋值
   dialogImageUrl.value = file.url
   //弹出对话框
@@ -133,23 +144,27 @@ const handleRemove = () => {
 }
 //照片钱上传成功之前的钩子约束文件的大小与类型
 const handlerUpload = (file: any) => {
-    if (file.type == 'image/png' || file.type == 'image/jpeg' || file.type == 'image/gif') {
-        if (file.size / 1024 / 1024 < 3) {
-            return true;
-        } else {
-            ElMessage({
-                type: 'error',
-                message: '上传文件务必小于3M'
-            })
-            return false;
-        }
+  if (
+    file.type == 'image/png' ||
+    file.type == 'image/jpeg' ||
+    file.type == 'image/gif'
+  ) {
+    if (file.size / 1024 / 1024 < 3) {
+      return true
     } else {
-        ElMessage({
-            type: 'error',
-            message: '上传文件务必PNG|JPG|GIF'
-        })
-        return false;
+      ElMessage({
+        type: 'error',
+        message: '上传文件务必小于3M',
+      })
+      return false
     }
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '上传文件务必PNG|JPG|GIF',
+    })
+    return false
+  }
 }
 //对外暴露
 defineExpose({ initHasSpuData })
