@@ -22,7 +22,7 @@ enum API {
   //追加一个新的SPU
   ADDSPU_URL = '/admin/product/saveSpuInfo/',
   //更新SPU
-  UPDATESPU_URL = '/admin/product/saveSpuInfo/',
+  UPDATESPU_URL = '/admin/product/updateSpuInfo',
 }
 
 //获取某一三级分类下的数据
