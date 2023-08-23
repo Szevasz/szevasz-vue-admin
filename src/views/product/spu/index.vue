@@ -137,13 +137,13 @@ const updateSpu = (row: SpuData) => {
   spu.value.initHasSpuData(row)
 }
 //子组件SpuForm绑定自定义事件:目前是让子组件通知父组件切换场景为0
-const changeScene = (obj:any) => {
+const changeScene = (obj: any) => {
   scene.value = obj.flag
   //切换页面的时候重新获取数据
-  if(obj.params == 'update'){
+  if (obj.params == 'update') {
     //留在更新页
     getHasSpu(pageNo.value)
-  }else{
+  } else {
     //回到第一页
     getHasSpu()
   }
