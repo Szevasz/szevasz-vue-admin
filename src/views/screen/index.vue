@@ -2,10 +2,14 @@
   <div class="container">
     <div class="screen" ref="screen">
       <div class="top">
-        <Top/>
+        <Top />
       </div>
       <div class="bottom">
-        <div class="left">左侧</div>
+        <div class="left">
+          <Tourist class="tourist"></Tourist>
+          <Sex class="sex"></Sex>
+          <Age class="age"></Age>
+        </div>
         <div class="center">中间</div>
         <div class="right">右侧</div>
       </div>
@@ -14,9 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { onMounted, ref } from 'vue'
 //引入子组件
 import Top from '/src/views/screen/components/top/index.vue'
+import Sex from '/src/views/screen/components/sex/index.vue'
+import Age from '/src/views/screen/components/age/index.vue'
+import Tourist from '/src/views/screen/components/tourist/index.vue'
 //获取数据大屏展示内容盒子的DOM元素
 let screen = ref()
 
@@ -50,21 +57,33 @@ window.onresize = () => {
     left: 50%;
     top: 50%;
     transform-origin: left top;
-    .top{
+    .top {
       width: 100%;
       height: 40px;
     }
-    .bottom{
+    .bottom {
       display: flex;
-      .right{
+      .right {
         flex: 1;
       }
-      .left{
+      .left {
         flex: 1;
         height: 1040px;
-        background: red;
+        display: flex;
+        flex-direction: column;
+        .tourist{
+          flex:1.2;
+        }
+        .sex{
+          flex: 1;
+          background-color: orange;
+        }
+        .age{
+          flex: 1;
+          background-color: hotpink;
+        }
       }
-      .center{
+      .center {
         flex: 2;
       }
     }
