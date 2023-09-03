@@ -71,14 +71,13 @@ window.onresize = () => {
         height: 1040px;
         display: flex;
         flex-direction: column;
-        .tourist{
-          flex:1.2;
+        .tourist {
+          flex: 1.2;
         }
-        .sex{
+        .sex {
           flex: 1;
-          background-color: orange;
         }
-        .age{
+        .age {
           flex: 1;
           background-color: hotpink;
         }
