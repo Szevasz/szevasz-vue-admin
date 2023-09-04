@@ -79,7 +79,6 @@ window.onresize = () => {
         }
         .age {
           flex: 1;
-          background-color: hotpink;
         }
       }
       .center {
