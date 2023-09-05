@@ -2,7 +2,7 @@
   <div class="box2">
     <div class="title">
       <p>年龄比例</p>
-      <img src="../../images/dataScreen-title.png">
+      <img src="../../images/dataScreen-title.png" />
     </div>
     <!-- 图形图标的容器 -->
     <div class="charts" ref="charts"></div>
@@ -19,16 +19,16 @@ onMounted(() => {
   let mychart = echarts.init(charts.value)
   let option = {
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
     },
     legend: {
-      right:50,
-      top:60,
-      orient:'vertical',//图例组件方向的设置
-      textStyle:{
-        color:'white',
-        fontSize:14,
-      }
+      right: 50,
+      top: 60,
+      orient: 'vertical', //图例组件方向的设置
+      textStyle: {
+        color: 'white',
+        fontSize: 14,
+      },
     },
     series: [
       {
@@ -40,40 +40,40 @@ onMounted(() => {
         itemStyle: {
           borderRadius: 10,
           borderColor: '#fff',
-          borderWidth: 2
+          borderWidth: 2,
         },
         label: {
           show: true,
           position: 'inside',
-          color:'white'
+          color: 'white',
         },
         emphasis: {
           label: {
             show: true,
             fontSize: 30,
-            fontWeight: 'bold'
-          }
+            fontWeight: 'bold',
+          },
         },
         labelLine: {
-          show: false
+          show: false,
         },
         data: [
           { value: 1048, name: 'Search Engine' },
           { value: 735, name: 'Direct' },
           { value: 580, name: 'Email' },
           { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
-        ]
-      }
+          { value: 300, name: 'Video Ads' },
+        ],
+      },
     ],
     //调整图形图标的位置
     grid: {
       left: 0,
       top: 0,
       right: 0,
-      bottom: 0
-    }
-  };
+      bottom: 0,
+    },
+  }
   mychart.setOption(option)
 })
 </script>

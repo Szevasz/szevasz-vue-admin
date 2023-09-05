@@ -10,7 +10,10 @@
           <Sex class="sex"></Sex>
           <Age class="age"></Age>
         </div>
-        <div class="center">中间</div>
+        <div class="center">
+          <Map class="map"></Map>
+          <Line class="line"></Line>
+        </div>
         <div class="right">右侧</div>
       </div>
     </div>
@@ -19,11 +22,14 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-//引入子组件
+//引入左侧三个子组件
 import Top from '/src/views/screen/components/top/index.vue'
 import Sex from '/src/views/screen/components/sex/index.vue'
 import Age from '/src/views/screen/components/age/index.vue'
 import Tourist from '/src/views/screen/components/tourist/index.vue'
+//引入中间两个子组件
+import Map from '/src/views/screen/components/map/index.vue'
+import Line from '/src/views/screen/components/line/index.vue'
 //获取数据大屏展示内容盒子的DOM元素
 let screen = ref()
 
@@ -83,6 +89,15 @@ window.onresize = () => {
       }
       .center {
         flex: 2;
+        display: flex;
+        flex-direction: column;
+        .map{
+          flex: 4;
+        }
+        .line{
+          flex: 1;
+          background: orange;
+        }
       }
     }
   }
