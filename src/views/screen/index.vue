@@ -91,12 +91,11 @@ window.onresize = () => {
         flex: 2;
         display: flex;
         flex-direction: column;
-        .map{
+        .map {
           flex: 4;
         }
-        .line{
+        .line {
           flex: 1;
-          background: orange;
         }
       }
     }
