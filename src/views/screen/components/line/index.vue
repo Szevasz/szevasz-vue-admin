@@ -20,12 +20,12 @@ onMounted(() => {
     tooltip: {
       show: true,
       trigger: 'axis',
-      formatter: function (params:any) {
+      formatter: function (params: any) {
         // 自定义提示框的内容
-        var seriesName = params[0].seriesName;
-        var data = params[0].data;
-        return seriesName + ': ' + data;
-      }
+        var seriesName = params[0].seriesName
+        var data = params[0].data
+        return seriesName + ': ' + data
+      },
     },
     xAxis: {
       type: 'category',
@@ -33,36 +33,36 @@ onMounted(() => {
       boundaryGap: false,
       //取消分割线
       splitLine: {
-        show: false
+        show: false,
       },
       //轴线的设置
       axisLine: {
-        show: true
+        show: true,
       },
       //刻度
       axisTick: {
-        show: true
-      }
+        show: true,
+      },
     },
     yAxis: {
       //取消分割线
       splitLine: {
-        show: false
+        show: false,
       },
       //轴线的设置
       axisLine: {
-        show: true
+        show: true,
       },
       //刻度
       axisTick: {
-        show: true
-      }
+        show: true,
+      },
     },
     grid: {
       left: 40,
       top: 0,
       right: 0,
-      bottom: 20
+      bottom: 20,
     },
     //系列
     series: [
@@ -78,16 +78,21 @@ onMounted(() => {
             y: 0,
             x2: 0,
             y2: 1,
-            colorStops: [{
-              offset: 0, color: 'red' // 0% 处的颜色
-            }, {
-              offset: 1, color: 'blue' // 100% 处的颜色
-            }],
-            global: false // 缺省为 false
-          }
-        }
-      }
-    ]
+            colorStops: [
+              {
+                offset: 0,
+                color: 'red', // 0% 处的颜色
+              },
+              {
+                offset: 1,
+                color: 'blue', // 100% 处的颜色
+              },
+            ],
+            global: false, // 缺省为 false
+          },
+        },
+      },
+    ],
   })
 })
 </script>
@@ -111,7 +116,6 @@ onMounted(() => {
 
   .charts {
     height: calc(100% - 40px);
-
   }
 }
 </style>
