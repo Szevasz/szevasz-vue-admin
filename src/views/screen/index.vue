@@ -81,14 +81,14 @@ window.onresize = () => {
         flex: 1;
         display: flex;
         flex-direction: column;
-        margin-left: 20px;
-        .rank{
-          flex: 1.5;
+        margin-left: 40px;
+        .rank {
+          flex: 1.2;
         }
-        .year{
+        .year {
           flex: 1;
         }
-        .counter{
+        .counter {
           flex: 1;
         }
       }
