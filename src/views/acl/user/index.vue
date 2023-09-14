@@ -20,42 +20,17 @@
       <el-table-column type="selection" align="center"></el-table-column>
       <el-table-column label="#" align="center" type="index"></el-table-column>
       <el-table-column label="ID" align="center" prop="id"></el-table-column>
-      <el-table-column
-        label="用户名字"
-        align="center"
-        prop="username"
-      ></el-table-column>
-      <el-table-column
-        label="用户名称"
-        align="center"
-        prop="name"
-      ></el-table-column>
-      <el-table-column
-        label="用户角色"
-        align="center"
-        prop="roleName"
-      ></el-table-column>
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-      ></el-table-column>
-      <el-table-column
-        label="更新时间"
-        align="center"
-        prop="updateTime"
-      ></el-table-column>
+      <el-table-column label="用户名字" align="center" prop="username"></el-table-column>
+      <el-table-column label="用户名称" align="center" prop="name"></el-table-column>
+      <el-table-column label="用户角色" align="center" prop="roleName"></el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
+      <el-table-column label="更新时间" align="center" prop="updateTime"></el-table-column>
       <el-table-column label="操作" width="300px" align="center">
         <template #="{ row, $index }">
           <el-button type="primary" size="small" @click="" icon="User">
             分配角色
           </el-button>
-          <el-button
-            type="primary"
-            size="small"
-            @click="updateUser(row)"
-            icon="Edit"
-          >
+          <el-button type="primary" size="small" @click="updateUser(row)" icon="Edit">
             编辑
           </el-button>
           <el-button type="primary" size="small" @click="" icon="Delete">
@@ -65,43 +40,26 @@
       </el-table-column>
     </el-table>
     <!-- 分页器 -->
-    <el-pagination
-      v-model:current-page="pageNo"
-      v-model:page-size="pageSize"
-      :page-sizes="[5, 7, 9, 11]"
-      :small="small"
-      :disabled="disabled"
-      :background="background"
-      layout="prev, pager, next, jumper,->,sizes,total"
-      :total="total"
-      @size-change="handler"
-      @current-change="getHasUser"
-    />
+    <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[5, 7, 9, 11]" :small="small"
+      :disabled="disabled" :background="background" layout="prev, pager, next, jumper,->,sizes,total" :total="total"
+      @size-change="handler" @current-change="getHasUser" />
   </el-card>
   <!-- 抽屉组件：完成添加新用户｜更新用户 -->
   <el-drawer v-model="drawer">
     <template #header>
       <h4>添加用户</h4>
     </template>
+    <!-- 身体部分 -->
     <template #default>
-      <el-form>
-        <el-form-item label="用户姓名">
-          <el-input
-            placeholder="请您输入用户姓名"
-            v-model="userParams.name"
-          ></el-input>
+      <el-form :model="userParams" :rules="rules" ref="formRef">
+        <el-form-item label="用户姓名" prop="username">
+          <el-input placeholder="请您输入用户姓名" v-model="userParams.name"></el-input>
         </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input
-            placeholder="请您输入用户昵称"
-            v-model="userParams.username"
-          ></el-input>
+        <el-form-item label="用户昵称" prop="name">
+          <el-input placeholder="请您输入用户昵称" v-model="userParams.username"></el-input>
         </el-form-item>
-        <el-form-item label="用户密码">
-          <el-input
-            placeholder="请您输入用户密码"
-            v-model="userParams.password"
-          ></el-input>
+        <el-form-item label="用户密码" prop="password">
+          <el-input placeholder="请您输入用户密码" v-model="userParams.password"></el-input>
         </el-form-item>
       </el-form>
     </template>
@@ -118,7 +76,7 @@
 import { reqAddOrUpdateUser, reqUserInfo } from '@/api/acl/user'
 import type { Records, UserResponseData, User } from '@/api/acl/user/type'
 import { ElMessage } from 'element-plus'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, nextTick} from 'vue'
 
 //默认页码
 let pageNo = ref<number>(1)
@@ -136,6 +94,8 @@ let userParams = reactive<User>({
   name: '',
   password: '',
 })
+//获取form组件实例
+let formRef = ref<any>()
 //组件挂载完毕
 onMounted(() => {
   getHasUser()
@@ -164,6 +124,12 @@ const addUser = () => {
     name: '',
     password: '',
   })
+  //清除上一次的错误的提示信息
+  nextTick(()=>{
+    formRef.value.clearValidate('username')
+    formRef.value.clearValidate('name')
+    formRef.value.clearValidate('password')
+  })
 }
 //编辑用户按钮方法回调
 const updateUser = (row: User) => {
@@ -171,6 +137,8 @@ const updateUser = (row: User) => {
 }
 //保存按钮的回调
 const save = async () => {
+  //点击保存按钮,确保所有表单符合再发请求
+  await formRef.value.validate() 
   let result: any = await reqAddOrUpdateUser(userParams)
   //添加或者更新成功
   if (result.code == 200) {
@@ -196,6 +164,39 @@ const save = async () => {
 //抽屉的取消按钮方法回调
 const cancel = () => {
   drawer.value = false
+}
+//校验用户名字回调函数
+const validatorUsername = (rule:any,value:any,callBack:any) => {
+  if(value.trim().length > 5){
+    callBack()
+  } else {
+    callBack(new Error('用户名字至少5位'))
+  }
+}
+//校验用户昵称回调函数
+const validatorname = (rule:any,value:any,callBack:any) => {
+  if(value.trim().length > 5){
+    callBack()
+  } else {
+    callBack(new Error('用户昵称至少5位'))
+  }
+}
+//校验用户密码回调函数
+const validatorPassword = (rule:any,value:any,callBack:any) => {
+  if(value.trim().length > 5){
+    callBack()
+  } else {
+    callBack(new Error('用户密码至少6位'))
+  }
+}
+//表单校验规则
+const rules = {
+  //用户名字
+  username:[{required:true,trigger:'blur',validator:validatorUsername}],
+  //用户昵称
+  name:[{required:true,trigger:'blur',validator:validatorname}],
+  //用户密码
+  password:[{required:true,trigger:'blur',validator:validatorPassword}]
 }
 </script>
 
