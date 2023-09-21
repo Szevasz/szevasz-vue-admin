@@ -81,18 +81,21 @@
           <el-input v-model="userParams.username" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox @change="handleCheckAllChange" v-model="checkAll" :indeterminate="isIndeterminate">全选</el-checkbox>
+          <el-checkbox @change="handleCheckAllChange" v-model="checkAll" :indeterminate="isIndeterminate">
+            全选
+          </el-checkbox>
           <!-- 显示职位的复选框 -->
           <el-checkbox-group v-model="userRole" @change="handleCheckedCitiesChange">
-            <el-checkbox v-for="(role, index) in allRole" :key="index" :label="role">{{ role.roleName
-            }}</el-checkbox>
+            <el-checkbox v-for="(role, index) in allRole" :key="index" :label="role">
+              {{ role.roleName }}
+            </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </div>
     </template>
     <template #footer>
       <div style="flex: auto">
-        <el-button @click="cancelClick">cancel</el-button>
+        <el-button @click="drawer1 = false">cancel</el-button>
         <el-button type="primary" @click="confirmClick">confirm</el-button>
       </div>
     </template>
@@ -100,8 +103,8 @@
 </template>
 
 <script setup lang="ts">
-import { reqAddOrUpdateUser, reqUserInfo } from '@/api/acl/user'
-import type { Records, UserResponseData, User } from '@/api/acl/user/type'
+import { reqAddOrUpdateUser, reqUserInfo, reqAllRole, reqSetUserRole } from '@/api/acl/user'
+import type { Records, UserResponseData, User, AllRoleResponseData, AllRole, SetRoleData } from '@/api/acl/user/type'
 import { ElMessage } from 'element-plus'
 import { onMounted, reactive, ref, nextTick } from 'vue'
 
@@ -118,9 +121,10 @@ let drawer = ref<boolean>(false)
 //控制角色分配抽屉组件的显示与隐藏
 let drawer1 = ref<boolean>(false)
 //存储全部职位的数据
-let allRole = ref<AllRole>([]);
+let allRole = ref<AllRole>([])
 //当前用户已有的职位
-let userRole = ref<AllRole>([]);
+let userRole = ref<AllRole>([])
+//存储全部职位信息
 //收集用户信息的响应式数据
 let userParams = reactive<User>({
   username: '',
@@ -234,7 +238,6 @@ const validatorPassword = (rule: any, value: any, callBack: any) => {
 }
 //表单校验规则
 const rules = {
-
   //用户名字
   username: [{ required: true, trigger: 'blur', validator: validatorUsername }],
   //用户昵称
@@ -243,18 +246,29 @@ const rules = {
   password: [{ required: true, trigger: 'blur', validator: validatorPassword }],
 }
 //分配角色按钮的回调
-const setRole = (row: User) => {
-  drawer1.value = true
+const setRole = async (row: User) => {
+  //存储已有用户信息
   Object.assign(userParams, row)
+  //获取全部的职位数据和当前用户已有的职位
+  let result: AllRoleResponseData = await reqAllRole((userParams.id as number))
+  if (result.code == 200) {
+    //存储全部职位
+    allRole.value = result.data.allRolesList
+    //存储当前用户职位
+    userRole.value = result.data.assignRoles
+    //抽屉显示出来
+    drawer1.value = true
+    console.log(allRole)
+  }
 }
 //收集顶部复选框全选数据
-const checkAll = ref<boolean>(false);
+const checkAll = ref<boolean>(false)
 //控制顶部全选复选框不确定的样式
-const isIndeterminate = ref<boolean>(true);
+const isIndeterminate = ref<boolean>(true)
 //顶部的全部复选框的change事件
 const handleCheckAllChange = (val: boolean) => {
   //val:true(全选)|false(没有全选)
-  userRole.value = val ? allRole.value : [];
+  userRole.value = val ? allRole.value : []
   //不确定的样式(确定样式)
   isIndeterminate.value = false
 }
@@ -262,9 +276,30 @@ const handleCheckAllChange = (val: boolean) => {
 const handleCheckedCitiesChange = (value: string[]) => {
   //顶部复选框的勾选数据
   //代表:勾选上的项目个数与全部的职位个数相等，顶部的复选框勾选上
-  checkAll.value = value.length === allRole.value.length;
+  checkAll.value = value.length === allRole.value.length
   //不确定的样式
   isIndeterminate.value = value.length !== allRole.value.length
+}
+//确定按钮的回调(分配职位)
+const confirmClick = async () => {
+    //收集参数
+    let data: SetRoleData = {
+        userId: (userParams.id as number),
+        roleIdList: userRole.value.map(item => {
+            return (item.id as number)
+        })
+    }
+    //分配用户的职位
+    let result: any = await reqSetUserRole(data);
+    if (result.code == 200) {
+        //提示信息
+        ElMessage({ type: 'success', message: '分配职务成功' });
+        //关闭抽屉
+        drawer1.value = false;
+        //获取更新完毕用户的信息,更新完毕留在当前页
+        getHasUser(pageNo.value);
+
+    }
 }
 </script>
 
