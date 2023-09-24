@@ -14,9 +14,9 @@
     <el-button type="primary" size="default" @click="addUser">
       添加用户
     </el-button>
-    <el-button type="danger" size="default" @click="">批量删除</el-button>
+    <el-button type="danger" size="default" @click="deleteSelectUser" :disabled="selectIdArr.length ? false : true">批量删除</el-button>
     <!-- table展示用户信息 -->
-    <el-table style="margin: 10px 0px" border :data="userArr">
+    <el-table @selection-change="selectChange" style="margin: 10px 0px" border :data="userArr">
       <el-table-column type="selection" align="center"></el-table-column>
       <el-table-column label="#" align="center" type="index"></el-table-column>
       <el-table-column label="ID" align="center" prop="id"></el-table-column>
@@ -33,9 +33,11 @@
           <el-button type="primary" size="small" @click="updateUser(row)" icon="Edit">
             编辑
           </el-button>
-          <el-button type="primary" size="small" @click="" icon="Delete">
-            删除
-          </el-button>
+          <el-popconfirm :title="`你确定要删除${row.username}?`" width="260px" @confirm="deleteUser(row.id)">
+            <template #reference>
+              <el-button type="primary" size="small" icon="Delete">删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -103,8 +105,22 @@
 </template>
 
 <script setup lang="ts">
-import { reqAddOrUpdateUser, reqUserInfo, reqAllRole, reqSetUserRole } from '@/api/acl/user'
-import type { Records, UserResponseData, User, AllRoleResponseData, AllRole, SetRoleData } from '@/api/acl/user/type'
+import {
+  reqAddOrUpdateUser,
+  reqUserInfo,
+  reqAllRole,
+  reqSetUserRole,
+reqRemoveUser,
+reqSelectUser,
+} from '@/api/acl/user'
+import type {
+  Records,
+  UserResponseData,
+  User,
+  AllRoleResponseData,
+  AllRole,
+  SetRoleData,
+} from '@/api/acl/user/type'
 import { ElMessage } from 'element-plus'
 import { onMounted, reactive, ref, nextTick } from 'vue'
 
@@ -124,7 +140,8 @@ let drawer1 = ref<boolean>(false)
 let allRole = ref<AllRole>([])
 //当前用户已有的职位
 let userRole = ref<AllRole>([])
-//存储全部职位信息
+//准备一个数组存储批量删除的用户的ID
+let selectIdArr = ref<User[]>([]);
 //收集用户信息的响应式数据
 let userParams = reactive<User>({
   username: '',
@@ -250,7 +267,7 @@ const setRole = async (row: User) => {
   //存储已有用户信息
   Object.assign(userParams, row)
   //获取全部的职位数据和当前用户已有的职位
-  let result: AllRoleResponseData = await reqAllRole((userParams.id as number))
+  let result: AllRoleResponseData = await reqAllRole(userParams.id as number)
   if (result.code == 200) {
     //存储全部职位
     allRole.value = result.data.allRolesList
@@ -282,23 +299,47 @@ const handleCheckedCitiesChange = (value: string[]) => {
 }
 //确定按钮的回调(分配职位)
 const confirmClick = async () => {
-    //收集参数
-    let data: SetRoleData = {
-        userId: (userParams.id as number),
-        roleIdList: userRole.value.map(item => {
-            return (item.id as number)
-        })
-    }
-    //分配用户的职位
-    let result: any = await reqSetUserRole(data);
+  //收集参数
+  let data: SetRoleData = {
+    userId: userParams.id as number,
+    roleIdList: userRole.value.map((item) => {
+      return item.id as number
+    }),
+  }
+  //分配用户的职位
+  let result: any = await reqSetUserRole(data)
+  if (result.code == 200) {
+    //提示信息
+    ElMessage({ type: 'success', message: '分配职务成功' })
+    //关闭抽屉
+    drawer1.value = false
+    //获取更新完毕用户的信息,更新完毕留在当前页
+    getHasUser(pageNo.value)
+  }
+}
+//删除某一个用户
+const deleteUser = async (userId: number) => {
+    let result: any = await reqRemoveUser(userId);
     if (result.code == 200) {
-        //提示信息
-        ElMessage({ type: 'success', message: '分配职务成功' });
-        //关闭抽屉
-        drawer1.value = false;
-        //获取更新完毕用户的信息,更新完毕留在当前页
-        getHasUser(pageNo.value);
-
+        ElMessage({ type: 'success', message: '删除成功' });
+        getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1);
+    }
+}
+//table复选框勾选的时候会触发的事件
+const selectChange = (value: any) => {
+    selectIdArr.value = value;
+}
+//批量删除按钮的回调
+const deleteSelectUser = async () => {
+    //整理批量删除的参数
+    let idsList: any = selectIdArr.value.map(item => {
+        return item.id;
+    });
+    //批量删除的请求
+    let result: any = await reqSelectUser(idsList);
+    if (result.code == 200) {
+        ElMessage({ type: 'success', message: '删除成功' });
+        getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1);
     }
 }
 </script>
