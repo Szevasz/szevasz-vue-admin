@@ -2,11 +2,11 @@
   <el-card style="height: 80px">
     <el-form :inline="true" class="form">
       <el-form-item label="用户名:">
-        <el-input placeholder="请你输入搜索用户名"></el-input>
+        <el-input placeholder="请你输入搜索用户名" v-model="keyword"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="default">搜索</el-button>
-        <el-button type="primary" size="default">重置</el-button>
+        <el-button type="primary" size="default" :disabled="keyword?false:true" @click="search">搜索</el-button>
+        <el-button type="primary" size="default" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -14,7 +14,9 @@
     <el-button type="primary" size="default" @click="addUser">
       添加用户
     </el-button>
-    <el-button type="danger" size="default" @click="deleteSelectUser" :disabled="selectIdArr.length ? false : true">批量删除</el-button>
+    <el-button type="danger" size="default" @click="deleteSelectUser" :disabled="selectIdArr.length ? false : true">
+      批量删除
+    </el-button>
     <!-- table展示用户信息 -->
     <el-table @selection-change="selectChange" style="margin: 10px 0px" border :data="userArr">
       <el-table-column type="selection" align="center"></el-table-column>
@@ -35,7 +37,9 @@
           </el-button>
           <el-popconfirm :title="`你确定要删除${row.username}?`" width="260px" @confirm="deleteUser(row.id)">
             <template #reference>
-              <el-button type="primary" size="small" icon="Delete">删除</el-button>
+              <el-button type="primary" size="small" icon="Delete">
+                删除
+              </el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -110,8 +114,8 @@ import {
   reqUserInfo,
   reqAllRole,
   reqSetUserRole,
-reqRemoveUser,
-reqSelectUser,
+  reqRemoveUser,
+  reqSelectUser,
 } from '@/api/acl/user'
 import type {
   Records,
@@ -123,7 +127,7 @@ import type {
 } from '@/api/acl/user/type'
 import { ElMessage } from 'element-plus'
 import { onMounted, reactive, ref, nextTick } from 'vue'
-
+import useLayOutSettingStore from '@/store/modules/setting'
 //默认页码
 let pageNo = ref<number>(1)
 //一页展示几条数据
@@ -141,7 +145,9 @@ let allRole = ref<AllRole>([])
 //当前用户已有的职位
 let userRole = ref<AllRole>([])
 //准备一个数组存储批量删除的用户的ID
-let selectIdArr = ref<User[]>([]);
+let selectIdArr = ref<User[]>([])
+//获取模版setting仓库
+let settingStore = useLayOutSettingStore()
 //收集用户信息的响应式数据
 let userParams = reactive<User>({
   username: '',
@@ -150,6 +156,8 @@ let userParams = reactive<User>({
 })
 //获取form组件实例
 let formRef = ref<any>()
+//定义响应式数:收集用户输入进来的关键词
+let keyword = ref<string>('')
 //组件挂载完毕
 onMounted(() => {
   getHasUser()
@@ -158,7 +166,7 @@ onMounted(() => {
 const getHasUser = async (pager = 1) => {
   //收集当前页码
   pageNo.value = pager
-  let result: UserResponseData = await reqUserInfo(pageNo.value, pageSize.value)
+  let result: UserResponseData = await reqUserInfo(pageNo.value, pageSize.value,keyword.value)
   if (result.code == 200) {
     console.log(result)
     total.value = result.data.total
@@ -319,28 +327,42 @@ const confirmClick = async () => {
 }
 //删除某一个用户
 const deleteUser = async (userId: number) => {
-    let result: any = await reqRemoveUser(userId);
-    if (result.code == 200) {
-        ElMessage({ type: 'success', message: '删除成功' });
-        getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1);
-    }
+  let result: any = await reqRemoveUser(userId)
+  if (result.code == 200) {
+    ElMessage({ type: 'success', message: '删除成功' })
+    getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1)
+  }
 }
 //table复选框勾选的时候会触发的事件
 const selectChange = (value: any) => {
-    selectIdArr.value = value;
+  selectIdArr.value = value
 }
 //批量删除按钮的回调
 const deleteSelectUser = async () => {
-    //整理批量删除的参数
-    let idsList: any = selectIdArr.value.map(item => {
-        return item.id;
-    });
-    //批量删除的请求
-    let result: any = await reqSelectUser(idsList);
-    if (result.code == 200) {
-        ElMessage({ type: 'success', message: '删除成功' });
-        getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1);
-    }
+  //整理批量删除的参数
+  let idsList: any = selectIdArr.value.map((item) => {
+    return item.id
+  })
+  //批量删除的请求
+  let result: any = await reqSelectUser(idsList)
+  if (result.code == 200) {
+    ElMessage({ type: 'success', message: '删除成功' })
+    getHasUser(userArr.value.length > 1 ? pageNo.value : pageNo.value - 1)
+  }
+}
+//搜索按钮的回调
+const search = () => {
+    //根据关键字获取相应的用户数据
+    getHasUser();
+    //清空关键字
+    keyword.value = '';
+}
+//重置按钮
+const reset = () => {
+    // 通过获取layoutsetting仓库的refsh属性进行整体刷新
+    // settingStore.refsh = !settingStore.refsh;
+    keyword.value = ''
+    getHasUser()
 }
 </script>
 
