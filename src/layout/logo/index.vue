@@ -29,11 +29,12 @@ export default {
     width: 38px;
     height: 38px;
     border-radius: 10px;
+    margin-left: 15px;
   }
 
   p {
     font-size: $base-logo-title-fontSize;
-    margin-left: 10px;
+    margin-left: 5px;
     padding-left: 20px;
   }
 }
