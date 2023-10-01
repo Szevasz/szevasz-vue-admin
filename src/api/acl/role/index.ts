@@ -21,3 +21,11 @@ export const reqAllRoleList = (page: number, limit: number, roleName: string) =>
   request.get<any, RoleResponseData>(
     API.ALLROLE_URL + `${page}/${limit}/?roleName=${roleName}`,
   )
+//添加职位与更新已有职位接口
+export const reqAddOrUpdateRole = (data: RoleData) => {
+  if (data.id) {
+    return request.put<any, any>(API.UPDATEROLE_URL, data)
+  } else {
+    return request.post<any, any>(API.ADDROLE_URL, data)
+  }
+}
