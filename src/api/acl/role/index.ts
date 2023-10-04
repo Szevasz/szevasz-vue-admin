@@ -1,6 +1,6 @@
 //角色管理模块的的接口
 import request from '@/utils/request'
-import type { RoleResponseData, RoleData } from './type'
+import type { RoleResponseData, RoleData, MenuResponseData } from './type'
 //枚举地址
 enum API {
   //获取全部的职位接口
@@ -29,3 +29,12 @@ export const reqAddOrUpdateRole = (data: RoleData) => {
     return request.post<any, any>(API.ADDROLE_URL, data)
   }
 }
+//获取全部菜单与按钮权限数据
+export const reqAllMenuList = (roleId: number) =>
+  request.get<any, MenuResponseData>(API.ALLPERMISSTION + roleId)
+
+//给相应的职位下发权限
+export const reqSetPermisstion = (roleId: number, permissionId: number[]) =>
+  request.post(
+    API.SETPERMISTION_URL + `roleId=${roleId}&permissionId=${permissionId}`,
+  )
