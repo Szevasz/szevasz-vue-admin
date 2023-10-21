@@ -5,7 +5,12 @@
         <el-input placeholder="请你输入职位关键词" v-model="keyword"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="default" @click="search" :disabled="keyword ? false : true">
+        <el-button
+          type="primary"
+          size="default"
+          @click="search"
+          :disabled="keyword ? false : true"
+        >
           搜索
         </el-button>
         <el-button type="primary" size="default" @click="reset">重置</el-button>
@@ -19,19 +24,48 @@
     <el-table border style="margin: 10px 0px" :data="allRole">
       <el-table-column type="index" align="center" label="#"></el-table-column>
       <el-table-column label="ID" align="center" prop="id"></el-table-column>
-      <el-table-column label="职位名称" align="center" prop="roleName" show-overflow-tooltip></el-table-column>
-      <el-table-column label="创建时间" align="center" show-overflow-tooltip prop="createTime"></el-table-column>
-      <el-table-column label="更新时间" align="center" show-overflow-tooltip prop="updateTime"></el-table-column>
+      <el-table-column
+        label="职位名称"
+        align="center"
+        prop="roleName"
+        show-overflow-tooltip
+      ></el-table-column>
+      <el-table-column
+        label="创建时间"
+        align="center"
+        show-overflow-tooltip
+        prop="createTime"
+      ></el-table-column>
+      <el-table-column
+        label="更新时间"
+        align="center"
+        show-overflow-tooltip
+        prop="updateTime"
+      ></el-table-column>
       <el-table-column label="操作" width="280px" align="center">
         <!-- row:已有的职位对象 -->
         <template #="{ row, $index }">
-          <el-button type="primary" size="small" icon="User" @click="setPermission(row)">
+          <el-button
+            type="primary"
+            size="small"
+            icon="User"
+            @click="setPermission(row)"
+          >
             分配权限
           </el-button>
-          <el-button type="primary" size="small" icon="Edit" @click="updateRole(row)">
+          <el-button
+            type="primary"
+            size="small"
+            icon="Edit"
+            @click="updateRole(row)"
+          >
             编辑
           </el-button>
-          <el-popconfirm :title="`你确定要删除${row.roleName}?`" width="260px" @confirm="removeRole(row.id)">
+          <el-popconfirm
+            :title="`你确定要删除${row.roleName}?`"
+            width="260px"
+            @confirm="removeRole(row.id)"
+          >
             <template #reference>
               <el-button type="primary" size="small" icon="Delete">
                 删除
@@ -41,15 +75,28 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]"
-      :background="true" layout="prev, pager, next, jumper,->,sizes,total" :total="total" @current-change="getHasRole"
-      @size-change="sizeChange" />
+    <el-pagination
+      v-model:current-page="pageNo"
+      v-model:page-size="pageSize"
+      :page-sizes="[10, 20, 30, 40]"
+      :background="true"
+      layout="prev, pager, next, jumper,->,sizes,total"
+      :total="total"
+      @current-change="getHasRole"
+      @size-change="sizeChange"
+    />
   </el-card>
   <!-- 添加职位与更新已有职位的结构:对话框 -->
-  <el-dialog v-model="dialogVisible" :title="RoleParams.id ? '更新职位' : '添加职位'">
+  <el-dialog
+    v-model="dialogVisible"
+    :title="RoleParams.id ? '更新职位' : '添加职位'"
+  >
     <el-form :model="RoleParams" :rules="rules" ref="form">
       <el-form-item label="职位名称" prop="roleName">
-        <el-input placeholder="请你输入职位名称" v-model="RoleParams.roleName"></el-input>
+        <el-input
+          placeholder="请你输入职位名称"
+          v-model="RoleParams.roleName"
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -66,8 +113,15 @@
     </template>
     <template #default>
       <!-- 树形控件 -->
-      <el-tree ref="tree" :data="menuArr" show-checkbox node-key="id" default-expand-all :default-checked-keys="selectArr"
-        :props="defaultProps" />
+      <el-tree
+        ref="tree"
+        :data="menuArr"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="selectArr"
+        :props="defaultProps"
+      />
     </template>
     <template #footer>
       <div style="flex: auto">
@@ -263,12 +317,12 @@ const handler = async () => {
 }
 //删除已有的职位
 const removeRole = async (id: number) => {
-    let result: any = await reqRemoveRole(id);
-    if (result.code == 200) {
-        //提示信息
-        ElMessage({ type: 'success', message: '删除成功' });
-        getHasRole(allRole.value.length > 1 ? pageNo.value : pageNo.value - 1);
-    }
+  let result: any = await reqRemoveRole(id)
+  if (result.code == 200) {
+    //提示信息
+    ElMessage({ type: 'success', message: '删除成功' })
+    getHasRole(allRole.value.length > 1 ? pageNo.value : pageNo.value - 1)
+  }
 }
 </script>
 
