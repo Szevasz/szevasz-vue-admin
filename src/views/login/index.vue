@@ -10,7 +10,7 @@
           ref="loginForms"
         >
           <h1>Hello</h1>
-          <h2>欢迎来到木材干湿度检测管理系统</h2>
+          <h2>Welcome to szevasz-admin</h2>
           <el-form-item prop="username">
             <el-input
               :prefix-icon="User"
