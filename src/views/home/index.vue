@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div class="box">
-      <img :src="userStore.avatar" class="avatar">
+      <img :src="userStore.avatar" class="avatar" />
       <div class="bottom">
         <h3 class="title">{{ getTime() }}好{{ userStore.username }}</h3>
         <p class="subtitle">Szevasz-admin</p>
@@ -49,11 +49,11 @@ onMounted(() => {
 
     .subtitle {
       font-style: italic;
-      color: #A9CCE3;
+      color: #a9cce3;
     }
   }
 }
-.bottoms{
+.bottoms {
   margin-top: 10px;
   display: flex;
   justify-content: center;

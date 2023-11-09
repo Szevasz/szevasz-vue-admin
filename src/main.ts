@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from '@/App.vue'
 //引入element-plus插件与样式
 import ElementPlus from 'element-plus'
+//暗黑模式需要的样式
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/dist/index.css'
 //配置element-plus国际化
 //@ts-ignore
